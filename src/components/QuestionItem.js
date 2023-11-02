@@ -1,19 +1,17 @@
 import React from "react";
 
-function QuestionItem({ question, deleteQuestion, updateCorrectAnswer }) {
+function QuestionItem({ question, onDeleteQuestion, onAnswerChange }) {
   const { id, prompt, answers, correctIndex } = question;
 
-  const options = answers.map((answer, index) => (
+  const answerOptions = answers.map((answer, index) => (
     <option key={index} value={index}>
       {answer}
     </option>
   ));
 
-  const handleUpdateCorrectAnswer = (event) => {
-    const newCorrectIndex = parseInt(event.target.value);
-    // Pass the new correctIndex to the parent component for updating
-    updateCorrectAnswer(id, newCorrectIndex); 
-  };
+  function handleAnswerChange(event) {
+    onAnswerChange(id, parseInt(event.target.value, 10));
+  }
 
   return (
     <li>
@@ -21,11 +19,11 @@ function QuestionItem({ question, deleteQuestion, updateCorrectAnswer }) {
       <h5>Prompt: {prompt}</h5>
       <label>
         Correct Answer:
-        <select value={correctIndex} onChange={handleUpdateCorrectAnswer}>
-          {options}
+        <select onChange={handleAnswerChange} defaultValue={correctIndex}>
+          {answerOptions}
         </select>
       </label>
-      <button onClick={() => deleteQuestion(id)}>Delete Question</button>
+      <button onClick={() => onDeleteQuestion(id)}>Delete Question</button>
     </li>
   );
 }
